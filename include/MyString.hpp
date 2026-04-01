@@ -207,8 +207,7 @@ public:
         friend class iterator;
     };
 
-    inline bool iterator::operator==(const const_iterator& other) const { return owner_==other.owner_ && idx_==other.idx_; }
-    inline bool iterator::operator!=(const const_iterator& other) const { return !(*this==other); }
+    // cross-iterator comparisons are defined after the class
 
 public:
     iterator begin() { return iterator(this, 0); }
@@ -216,5 +215,13 @@ public:
     const_iterator cbegin() const { return const_iterator(this, 0); }
     const_iterator cend() const { return const_iterator(this, len_); }
 };
+
+// Define cross-iterator comparisons out of class with proper scope
+inline bool MyString::iterator::operator==(const MyString::const_iterator& other) const {
+    return owner_ == other.owner_ && idx_ == other.idx_;
+}
+inline bool MyString::iterator::operator!=(const MyString::const_iterator& other) const {
+    return !(*this == other);
+}
 
 #endif
